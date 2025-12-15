@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser
+    volumes:
+      - /:/srv
+    ports:
+      - "8080:80"
+    # user: "${UID}:${GID}"
+    user: "0:0"
+    privileged: true

@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+    frps:
+        command: '-c /opt/frpc/frpc.toml'
+        image: 'fatedier/frpc:v0.61.2'
+        volumes:
+            - '/opt/frpc:/opt/frpc'
+        environment:
+            - TZ=Asia/Shanghai
+        restart: always
+        container_name: frpc
+        # ports:
+        #     - "7000:7000"
+        #     - "7000:7000/udp"
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared

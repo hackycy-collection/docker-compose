@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: n8n
+    restart: unless-stopped
+    # ports:
+    #   - "5678:5678"
+    environment:
+      - GENERIC_TIMEZONE=Asia/Shanghai
+      - TZ=Asia/Shanghai
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_HOST=https://xxx.com
+      - N8N_PROXY_HOPS=1
+      - WEBHOOK_URL=https://xxx.com/webhook
+      - N8N_AI_ASSISTANT_BASE_URL=https://ai-assistant.n8n.io
+    volumes:
+      - n8n_data:/home/node/.n8n
+    # command: start --tunnel
+
+volumes:
+  n8n_data:
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared

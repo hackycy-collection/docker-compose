@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  emqx:
+    image: emqx/emqx:5.8.0
+    container_name: emqx
+    user: root
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "8084:8084"
+      - "8883:8883"
+      # - "18083:18083"
+    volumes:
+      - /opt/emqx/data:/opt/emqx/data
+      - /opt/emqx/log:/opt/emqx/log
+      - /opt/emqx/plugins:/opt/emqx/plugins
+
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared

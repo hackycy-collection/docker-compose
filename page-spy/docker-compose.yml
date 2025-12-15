@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  web:
+    image: ghcr.io/huolalatech/page-spy-web:release
+    volumes:
+      - /opt/pagespy/log:/app/log
+      - /opt/pagespy/data:/app/data
+    # ports:
+    #   - "6752:6752"
+    restart: always
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared
