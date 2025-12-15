@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  subconverter:
+    image: tindy2013/subconverter:latest
+    container_name: subconverter
+    volumes:
+      - /opt/subconverter/air_pref.ini:/base/air_pref.ini
+      - /opt/subconverter/air_profile.ini:/base/profiles/air_profile.ini
+      - /opt/subconverter/hackycy_external_config.ini/:/base/config/hackycy_external_config.ini
+    # ports:
+    #   - "25500:25500"
+    restart: always
