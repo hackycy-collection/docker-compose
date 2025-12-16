@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  shadowsocks:
+    image: shadowsocks/shadowsocks-libev:edge
+    environment:
+      PASSWORD: "99cefdf4-f9ed-4a1e-9c83-7278cbf29b30"
+      METHOD: "chacha20-ietf-poly1305"
+      SERVER_PORT: "50122"
+    ports:
+      - "50122:50122"
+      - "50122:50122/udp"
+    restart: always
