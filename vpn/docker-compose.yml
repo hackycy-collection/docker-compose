@@ -1,0 +1,75 @@
+version: '3'
+
+services:
+
+  shadowsocks:
+    image: shadowsocks/shadowsocks-libev:edge
+    environment:
+      PASSWORD: "99cefdf4-f9ed-4a1e-9c83-7278cbf29b30"
+      METHOD: "chacha20-ietf-poly1305"
+      SERVER_PORT: "50122"
+    ports:
+      - "50122:50122"
+      - "50122:50122/udp"
+    restart: always
+    
+  ipsec:
+    image: hwdsl2/ipsec-vpn-server
+    volumes:
+      - /lib/modules:/lib/modules:ro
+      - ikev2-vpn-data:/etc/ipsec.d
+    environment:
+      VPN_PASSWORD: "afcaedd5-03cd-5f97-6261-c354fb5a6567"
+      VPN_IPSEC_PSK: "3a677fc0-8d40-8189-0306-784cdaeb42fa"
+      VPN_USER: admin
+      VPN_IKEV2_ONLY: yes
+    ports:
+      - "500:500/udp"
+      - "4500:4500/udp"
+    restart: always
+    privileged: true
+
+  warp:
+    image: e7h4n/cloudflare-warp
+    volumes:
+      - warp-vpn-data:/var/lib/cloudflare-warp:rw
+    restart: always
+
+  v2ray-warp:
+    image: v2fly/v2fly-core
+    command: run -c /etc/v2ray/config.json
+    volumes:
+      - /home/airport/v2ray/config-warp.json:/etc/v2ray/config.json
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    restart: always
+    privileged: true
+    depends_on:
+      - warp
+
+  v2ray-iproyal:
+    image: v2fly/v2fly-core
+    command: run -c /etc/v2ray/config.json
+    volumes:
+      - /vpn/v2ray/config-iproyal.json:/etc/v2ray/config.json
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+    ports:
+      - "7086:7086"
+      - "7086:7086/udp"
+    restart: always
+    privileged: true
+
+  trojan:
+    image: p4gefau1t/trojan-go
+    volumes:
+      - /home/airport/trojan/config.json:/etc/trojan-go/config.json
+      - /opt/nginx/letsencrypt:/letsencrypt/ssl
+    ports:
+      - "9814:9814"
+      - "9814:9814/udp"
+    restart: always
+
+volumes:
+  ikev2-vpn-data:
+  warp-vpn-data:
