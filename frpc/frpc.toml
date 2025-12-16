@@ -1,0 +1,13 @@
+serverAddr = "frps"
+serverPort = 7000
+
+auth.method = "token"
+auth.token = "hackycy"
+
+[[proxies]]
+name = "test"
+type = "http"
+localIP = "www-nginx-1"
+localPort = 80
+customDomains = ["test.com"]
+locations = ["/"]

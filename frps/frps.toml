@@ -1,0 +1,25 @@
+# 服务器的公网IP
+bindAddr = "0.0.0.0"
+# 与客户端建立连接的端口
+bindPort = 7000
+
+vhostHTTPPort = 80
+
+# 服务端控制面板
+webServer.addr = "0.0.0.0"
+# 访问控制面板的端口号
+webServer.port = 7500
+# 控制面板的用户名和密码，暴露在公网的服务请使用严谨一些的用户名密码
+webServer.user = "admin"
+webServer.password = "admin"
+
+# 配置服务端的鉴权，这里使用Token进行鉴权，客户端必须用指定的Token才可以与服务端建立连接，防止滥用
+auth.method = "token"
+auth.token = "xxxxxx"
+
+# 配置服务端只打印warn级别的日志，并将日志输出到指定目录（注意这个目录指向的是容器内的目录）
+log.level = "warn"
+log.to = "/opt/frps/logs"
+
+# custom 404 page for HTTP requests
+custom404Page = "/opt/frps/404.html"
