@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+    
+  ipsec:
+    image: hwdsl2/ipsec-vpn-server
+    volumes:
+      - /lib/modules:/lib/modules:ro
+      - ikev2-vpn-data:/etc/ipsec.d
+    environment:
+      VPN_PASSWORD: "afcaedd5-03cd-5f97-6261-c354fb5a6567"
+      VPN_IPSEC_PSK: "3a677fc0-8d40-8189-0306-784cdaeb42fa"
+      VPN_USER: admin
+      VPN_IKEV2_ONLY: yes
+    ports:
+      - "500:500/udp"
+      - "4500:4500/udp"
+    restart: always
+    privileged: true
+
+volumes:
+  ikev2-vpn-data:
