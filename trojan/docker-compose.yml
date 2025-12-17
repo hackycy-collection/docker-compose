@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+
+  trojan:
+    image: p4gefau1t/trojan-go
+    volumes:
+      - /opt/airport/trojan/config.json:/etc/trojan-go/config.json
+      - /opt/nginx/letsencrypt:/letsencrypt/ssl
+    ports:
+      - "9814:9814"
+      - "9814:9814/udp"
+    restart: always

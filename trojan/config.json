@@ -1,0 +1,14 @@
+{
+    "run_type": "server",
+    "local_addr": "0.0.0.0",
+    "local_port": 9814,
+    "remote_addr": "172.25.0.2",
+    "remote_port": 80,
+    "password": [
+        "0d5ed10b-a15e-45fe-8862-16f1e4264136"
+    ],
+    "ssl": {
+        "cert": "/letsencrypt/ssl/live/npm-19/cert.pem",
+        "key": "/letsencrypt/ssl/live/npm-19/privkey.pem"
+    }
+}
