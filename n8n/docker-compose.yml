@@ -11,14 +11,28 @@ services:
       - GENERIC_TIMEZONE=Asia/Shanghai
       - TZ=Asia/Shanghai
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_RUNNERS_ENABLED=true
       - N8N_HOST=https://xxx.com
       - N8N_PROXY_HOPS=1
       - WEBHOOK_URL=https://xxx.com/webhook
       - N8N_AI_ASSISTANT_BASE_URL=https://ai-assistant.n8n.io
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_RUNNERS_MODE=external
+      - N8N_RUNNERS_BROKER_LISTEN_ADDRESS=0.0.0.0
+      - N8N_RUNNERS_AUTH_TOKEN=xxxxxx
+      - N8N_NATIVE_PYTHON_RUNNER=true
     volumes:
       - n8n_data:/home/node/.n8n
     # command: start --tunnel
+
+  task-runners:
+    image: docker.n8n.io/n8nio/runners
+    container_name: n8n-runners
+    environment:
+      - N8N_RUNNERS_TASK_BROKER_URI=http://n8n-main:5679
+      - N8N_RUNNERS_AUTH_TOKEN=xxxxxx
+      # etc.
+    depends_on:
+      - n8n
 
 volumes:
   n8n_data:
