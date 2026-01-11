@@ -1,0 +1,26 @@
+services:
+  wechat:
+    image: ghcr.io/xiaoheicat/docker-wechat-sogou-pinyin:latest
+    container_name: wechat_container
+    volumes:
+      - /opt/wechat/.xwechat:/root/.xwechat
+      - /opt/wechat/xwechat_files:/root/xwechat_files
+      - /opt/wechat/downloads:/root/downloads
+      - /dev/snd:/dev/snd
+    user: "0:0"
+    ports:
+      - "5800:5800"
+      - "5900:5900"
+    environment:
+      - LANG=zh_CN.UTF-8
+      - USER_ID=0
+      - GROUP_ID=0
+      - WEB_AUDIO=0
+      - TZ=Asia/Shanghai
+      - ELECTRON_DISABLE_SANDBOX=1
+      - VNC_PASSWORD=XXXXXX_PASSWORD
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    privileged: true
