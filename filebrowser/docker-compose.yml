@@ -2,11 +2,14 @@ version: "3.8"
 
 services:
   filebrowser:
+    container_name: filebrowser
     image: filebrowser/filebrowser
+    restart: unless-stopped
     volumes:
       - /:/srv
     ports:
       - "8080:80"
-    # user: "${UID}:${GID}"
-    user: "0:0"
-    privileged: true
+    # 以 root 用户运行
+    # user: "0:0"
+    # privileged: true
+    user: "${UID}:${GID}"
