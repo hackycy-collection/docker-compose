@@ -1,4 +1,16 @@
 name: lobehub
+
+x-lobe-env:
+  lobe-db-name: &lobe_db_name lobechat
+  postgres-password: &postgres_password uWNZugjBqixf8dxC
+  key-vaults-secret: &key_vaults_secret YOUR_KEY_VAULTS_SECRET
+  auth-secret: &auth_secret YOUR_AUTH_SECRET
+  jwks-key: &jwks_key '{"keys":[{"d":"PVoFyqyrGstB8wU52S7gqqQQdZLtin_thcEM0nrNtqp9U-NlKLlhgEcWp5t89ycgvhsAzmrRbezGj4JBTr3jn7eWdwQpPJNYiipnsgeJn0pwsB0H2dMqtavxinoPVXkMTOuGHMTFhhyguFBw2JbIL0PTQUcUlXjv40OoJpYHZeggSxgfV-TuxjwW8Ll4-n84M5IOi6A53RvioE-Hm1iyIc2XLBCfyOu-SbAQYi8HzrA64kCxobAB0peLQMiAzfZmwPKiGOhnhKrAlYmG02qFnbUYiJu_-AXwsAyGv9S9i6dwK7QXaGGWYyis8LlPpd_JmPrBnrWomwDlI045NUMWZQ","dp":"OSXI2NBBZl2r0Dpf4-1z44A_jC5lOyXtJhXQYnSXy5eIuxTJcEtkUYagGEwnREO4Q3t-4J-lT_6Y71M1ZlgKG1upwfw1O4aE3vGpHOik9iZYYCjA8fe5uBfOpX1ELmOtHNoHRhMtyjuPxSFXLlSp3bgcF1f3F40ClukdvXCx0Mc","dq":"m6hNdfj-F8E_7nUlX2nG95OffkFrhHTo67ML9aPgpvFwBlzg-hk5LwtxMfUzngqWF78TMl0JDm7vS1bz0xlWqXqu8pFPoTUnUoWgYfvuyHLBwR5TgccQkfoKbkSMzYNy8VJPXZeyIjVXsW98tZvj-NZF-M9Pke_EWJm-jjXCu_8","e":"AQAB","kty":"RSA","n":"piffosMS0HOSgsSr_zQkXYaQt1kOCD73VR0b2XJD6UdQCKPbnBOzTIuA_xowX61QVsl5pCZLTw8ERC3r2Nlxj5Rp_H6RuOT7ioUqlbnxSGnfuAn8dFupY3A-sf9HVDOvtJdlS-nO9yA4wWU-A50zZ1Mf0pPZlUZE6dUQfsJFi5yXaNAybyk3U4VpMO_SXAilWEHVhiO0F0ccpJMCkT47AeXmYH9MlWwIGcay0UiAsdrs8J-q1arZ7Mbq0oxHmUXJG0vwRvAL8KnCEi8cJ3e2kKCRcr-BQCujsHUyUl6f_ATwSVuTHdAR1IzIcW37v27h3WQK_v0ffQM1NstamDX5vQ","p":"4myVm2M5cZGvVXsOmWUTUG87VC1GlQcL5tmMNSGSpQCL8yWZ1vANkmCxSMptrKB4dU9DAB3On6_oMhW1pJ3uYNGSW49BcmJoLkiWKeg5zWFnKPQNuThQmY1sCCubtKhBQgaYUr7TVzN9smrDV3zCu9MlRl-XPwnEmWaDII3g-f8","q":"u9v4IOEsb4l2Y3eWKE2bwJh5fJRR4vivaYA7U-1-OpvDwB3A48Rey9IL1ucXqE5G1Du8BtijPm5oSAar5uzrjtg1bZ9gevif6DnBGaIRE7LnSrUsTPfZwzntJ1rTaGiVe_pAdnTKXXaH6DxygXxH4wvGgA44V3TTfBXQUcjzdEM","qi":"lDBnSPKkRnYqQvbqVD1LxzqBPEeqEA3GyCqMj6fIZNgoEaBSLi0TSsUyGZ5mahX3KO35vKAZa5jvGjhvUGUiXycq8KvRZdeGK45vJdwZT2TiXiDwo9IQgJcbFMpxaB9DhjX2x0yqxgUY5ca75jLqbMuKBKBN0PVqIr9jlHkR8_s","use":"sig","kid":"6823046760c5d460","alg":"RS256"}]}'
+  rustfs-access-key: &rustfs_access_key admin
+  rustfs-secret-key: &rustfs_secret_key YOUR_RUSTFS_PASSWORD
+  rustfs-lobe-bucket: &rustfs_lobe_bucket lobe
+  database-url: &database_url postgresql://postgres:uWNZugjBqixf8dxC@postgresql:5432/lobechat
+
 services:
   network-service:
     image: alpine
@@ -20,8 +32,8 @@ services:
     volumes:
       - '/opt/lobe/paradedb/data:/var/lib/postgresql/data'
     environment:
-      - 'POSTGRES_DB=${LOBE_DB_NAME}'
-      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD}'
+      POSTGRES_DB: *lobe_db_name
+      POSTGRES_PASSWORD: *postgres_password
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U postgres']
       interval: 5s
@@ -53,9 +65,9 @@ services:
     container_name: lobe-rustfs
     network_mode: 'service:network-service'
     environment:
-      - RUSTFS_CONSOLE_ENABLE=true
-      - RUSTFS_ACCESS_KEY=${RUSTFS_ACCESS_KEY}
-      - RUSTFS_SECRET_KEY=${RUSTFS_SECRET_KEY}
+      RUSTFS_CONSOLE_ENABLE: 'true'
+      RUSTFS_ACCESS_KEY: *rustfs_access_key
+      RUSTFS_SECRET_KEY: *rustfs_secret_key
     volumes:
       - rustfs-data:/data
     healthcheck:
@@ -64,7 +76,7 @@ services:
       timeout: 3s
       retries: 30
     command:
-      ['--access-key', '${RUSTFS_ACCESS_KEY}', '--secret-key', '${RUSTFS_SECRET_KEY}', '/data']
+      ['--access-key', *rustfs_access_key, '--secret-key', *rustfs_secret_key, '/data']
 
   rustfs-init:
     image: minio/mc:latest
@@ -75,7 +87,7 @@ services:
     volumes:
       - /opt/lobe/rustfs/bucket.config.json:/bucket.config.json:ro
     entrypoint: /bin/sh
-    command: -c ' set -eux; echo "S3_ACCESS_KEY=${RUSTFS_ACCESS_KEY}, S3_SECRET_KEY=${RUSTFS_SECRET_KEY}"; mc --version; mc alias set rustfs "http://network-service:9000" "${RUSTFS_ACCESS_KEY}" "${RUSTFS_SECRET_KEY}"; mc ls rustfs || true; mc mb "rustfs/lobe" --ignore-existing; mc admin info rustfs || true; mc anonymous set-json "/bucket.config.json" "rustfs/lobe"; '
+    command: -c ' set -eux; echo "S3_ACCESS_KEY=admin, S3_SECRET_KEY=YOUR_RUSTFS_PASSWORD"; mc --version; mc alias set rustfs "http://network-service:9000" "admin" "YOUR_RUSTFS_PASSWORD"; mc ls rustfs || true; mc mb "rustfs/lobe" --ignore-existing; mc admin info rustfs || true; mc anonymous set-json "/bucket.config.json" "rustfs/lobe"; '
     restart: 'no'
     networks:
       - lobe-network
@@ -109,22 +121,23 @@ services:
       redis:
         condition: service_healthy
     environment:
-      - 'KEY_VAULTS_SECRET=${KEY_VAULTS_SECRET}'
-      - 'AUTH_SECRET=${AUTH_SECRET}'
-      - 'DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgresql:5432/${LOBE_DB_NAME}'
-      - 'S3_BUCKET=${RUSTFS_LOBE_BUCKET}'
-      - 'S3_ENABLE_PATH_STYLE=1'
-      - 'S3_ACCESS_KEY=${RUSTFS_ACCESS_KEY}'
-      - 'S3_ACCESS_KEY_ID=${RUSTFS_ACCESS_KEY}'
-      - 'S3_SECRET_ACCESS_KEY=${RUSTFS_SECRET_KEY}'
-      - 'LLM_VISION_IMAGE_USE_BASE64=1'
-      - 'S3_SET_ACL=0'
-      - 'SEARXNG_URL=http://searxng:8080'
-      - 'REDIS_URL=redis://redis:6379'
-      - 'REDIS_PREFIX=lobechat'
-      - 'REDIS_TLS=0'
-      - 'APP_URL=https://lobe.example.com'  # 浏览器访问的公开 URL
-      - 'INTERNAL_APP_URL=http://localhost:3210'  # 服务器到服务器调用的内部 URL
+      KEY_VAULTS_SECRET: *key_vaults_secret
+      AUTH_SECRET: *auth_secret
+      JWKS_KEY: *jwks_key
+      DATABASE_URL: *database_url
+      S3_BUCKET: *rustfs_lobe_bucket
+      S3_ENABLE_PATH_STYLE: '1'
+      S3_ACCESS_KEY: *rustfs_access_key
+      S3_ACCESS_KEY_ID: *rustfs_access_key
+      S3_SECRET_ACCESS_KEY: *rustfs_secret_key
+      LLM_VISION_IMAGE_USE_BASE64: '1'
+      S3_SET_ACL: '0'
+      SEARXNG_URL: http://searxng:8080
+      REDIS_URL: redis://redis:6379
+      REDIS_PREFIX: lobechat
+      REDIS_TLS: '0'
+      APP_URL: https://lobe.example.com  # 浏览器访问的公开 URL
+      INTERNAL_APP_URL: http://localhost:3210  # 服务器到服务器调用的内部 URL
     # env_file:
     #   - .env
     restart: always
