@@ -4,10 +4,10 @@ services:
     image: alpine
     container_name: lobe-network
     restart: always
-    ports:
-      - '9000:9000' # RustFS API
-      - '9001:9001' # RustFS Console
-      - '3210:3210' # LobeChat
+    # ports:
+    #   - '${RUSTFS_PORT}:9000' # RustFS API
+    #   - '9001:9001' # RustFS Console
+    #   - '${LOBE_PORT}:3210' # LobeChat
     command: tail -f /dev/null
     networks:
       - lobe-network
@@ -15,8 +15,8 @@ services:
   postgresql:
     image: paradedb/paradedb:latest-pg17
     container_name: lobe-postgres
-    ports:
-      - '5432:5432'
+    # ports:
+    #   - '5432:5432'
     volumes:
       - '/opt/lobe/paradedb/data:/var/lib/postgresql/data'
     environment:
@@ -34,8 +34,8 @@ services:
   redis:
     image: redis:7-alpine
     container_name: lobe-redis
-    ports:
-      - '6379:6379'
+    # ports:
+    #   - '6379:6379'
     command: redis-server --save 60 1000 --appendonly yes
     volumes:
       - 'redis_data:/data'
@@ -90,8 +90,8 @@ services:
     restart: always
     networks:
       - lobe-network
-    # env_file:
-    #   - .env
+    env_file:
+      - stack.env
 
   lobe:
     image: lobehub/lobehub
@@ -123,10 +123,8 @@ services:
       - 'REDIS_URL=redis://redis:6379'
       - 'REDIS_PREFIX=lobechat'
       - 'REDIS_TLS=0'
-      - 'APP_URL=https://lobe.example.com'  # 浏览器访问的公开 URL
-      - 'INTERNAL_APP_URL=http://localhost:3210'  # 服务器到服务器调用的内部 URL
-    # env_file:
-    #   - .env
+    env_file:
+      - stack.env
     restart: always
 
 volumes:
@@ -139,4 +137,5 @@ volumes:
 
 networks:
   lobe-network:
-    driver: bridge
+    external:
+      name: nginx_proxy_shared
