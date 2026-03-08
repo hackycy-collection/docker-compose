@@ -1,0 +1,15 @@
+{
+  "gateway": {
+    "mode": "local",
+    "controlUi": {
+      "enabled": true,
+      "basePath": "/",
+      "dangerouslyAllowHostHeaderOriginFallback": true
+    },
+    "auth": {
+      "mode": "token",
+      "allowTailscale": true,
+      "token": "your_token_here"
+    }
+  }
+}
