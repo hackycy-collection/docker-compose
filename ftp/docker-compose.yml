@@ -1,0 +1,13 @@
+services:
+  ftp-server:
+    container_name: ftp-server
+    environment:
+      - PUBLIC_IP=0.0.0.0
+      - FTP_PASS=xxxxxx
+      - FTP_USER=admin
+    image: garethflowers/ftp-server
+    ports:
+      - "20-21:20-21/tcp"
+      - "40000-40009:40000-40009/tcp" # For passive mode
+    volumes:
+        - "/home/ftp/data:/home/user"
