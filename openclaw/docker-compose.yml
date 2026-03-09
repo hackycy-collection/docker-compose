@@ -77,6 +77,27 @@ services:
     depends_on:
       - openclaw-gateway
 
+  openclaw-cli-interactive:
+    image: ${OPENCLAW_IMAGE:-openclaw:local}
+    network_mode: "service:openclaw-gateway"
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN:-}
+      BROWSER: echo
+      CLAUDE_AI_SESSION_KEY: ${CLAUDE_AI_SESSION_KEY:-}
+      CLAUDE_WEB_SESSION_KEY: ${CLAUDE_WEB_SESSION_KEY:-}
+      CLAUDE_WEB_COOKIE: ${CLAUDE_WEB_COOKIE:-}
+    volumes:
+      - ${OPENCLAW_CONFIG_DIR}:/home/node/.openclaw
+      - ${OPENCLAW_WORKSPACE_DIR}:/home/node/.openclaw/workspace
+    # 关键：覆盖 entrypoint，使用 sleep 保持容器运行
+    command: ["sleep", "infinity"]
+    # 不需要 tty 和 stdin_open，因为它会一直运行
+    restart: "no"  # 不要自动重启，因为是手动启动
+    depends_on:
+      - openclaw-gateway
+
 networks:
   openclaw-network:
     external:
