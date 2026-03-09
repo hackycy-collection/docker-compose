@@ -10,6 +10,9 @@
       "mode": "token",
       "allowTailscale": true,
       "token": "your_token_here"
+    },
+    "remote": {
+      "token": "your_token_here"
     }
   }
 }
