@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - /opt/www/html:/usr/share/nginx/html
+      - /opt/www/conf.d:/etc/nginx/conf.d
+    user: "0:0"
+    command: >
+      sh -c "
+      chown -R 0:0 /usr/share/nginx/html &&
+      chmod -R 755 /usr/share/nginx/html &&
+      nginx -g 'daemon off;'
+      "
+    # ports:
+    #   - "80:80"
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared
