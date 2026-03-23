@@ -2,7 +2,7 @@ version: '3'
 
 services:
   web:
-    image: ghcr.io/huolalatech/page-spy-web:release
+    image: ghcr.io/huolalatech/page-spy-web:latest
     volumes:
       - /opt/pagespy/log:/app/log
       - /opt/pagespy/data:/app/data
