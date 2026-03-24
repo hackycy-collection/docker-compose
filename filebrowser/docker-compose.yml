@@ -1,15 +1,14 @@
-version: "3.8"
+version: '3'
 
 services:
   filebrowser:
-    container_name: filebrowser
     image: filebrowser/filebrowser
-    restart: unless-stopped
-    volumes:
-      - /:/srv
+    container_name: filebrowser
+    user: "1100:1100"  # 指定 UID:GID
     ports:
       - "8080:80"
-    # 以 root 用户运行
-    # user: "0:0"
-    # privileged: true
-    user: "${UID}:${GID}"
+    volumes:
+      - /:/srv
+      - /opt/filebrowser/database:/database
+      - /opt/filebrowser/config:/config
+    restart: unless-stopped
