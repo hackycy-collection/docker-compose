@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  ssserver-rust:
+    image: ghcr.io/shadowsocks/ssserver-rust:latest
+    container_name: ssserver-rust
+    restart: always
+    ports:
+      - 9623:8388/tcp
+      - 9623:8388/udp
+    volumes:
+      - /opt/shadowsocks-rust/config.json:/etc/shadowsocks-rust/config.json
+    stdin_open: true
+    tty: true
