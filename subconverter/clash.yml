@@ -1,0 +1,77 @@
+port: 7890
+socks-port: 7891
+
+# Linux 和 macOS 的 redir 代理端口 (如需使用此功能，请取消注释)
+# redir-port: 7892
+
+# 允许局域网的连接（可用来共享代理）
+allow-lan: false
+
+# 仅在将allow-lan设置为true时适用
+# #"*": 绑定所有IP地址
+# #192.168.122.11: 绑定单个IPv4地址
+# #"[aaaa::a8aa:ff:fe09:57d8]": 绑定单个IPv6地址
+bind-address: "*"
+ipv6: false
+
+# 规则模式：rule（规则） / global（全局代理）/ direct（全局直连）/ script (脚本)
+mode: rule
+
+# 设置日志输出级别 (默认级别：silent，即不输出任何内容，以避免因日志内容过大而导致程序内存溢出）。
+# 5 个级别：silent / error / warning / info / debug。级别越高日志输出量越大，越倾向于调试，若需要请自行开启。
+log-level: info
+
+# Clash 的 RESTful API
+# 您可以将静态网页资源（如 clash-dashboard）放置在一个目录中，clash 将会服务于 `RESTful API/ui`
+# 参数应填写配置目录的相对路径或绝对路径。
+# http://127.0.0.1:9090/ui/#/
+# external-ui: folder
+# yacd面板：  https://github.com/haishanh/yacd
+# Razord面板：http://clash.razord.top/#/proxies
+# external-ui: dashboard
+external-controller: ":9090"
+
+proxies:
+  - {name: trojan, server: 127.0.0.1, port: 8081, type: trojan, password: 0d5ed10b-a15e-45fe-8862-16f1e4264136, sni: hosts.si-yee.com, skip-cert-verify: true, udp: true}
+  - {name: ss, server: 127.0.0.1, port: 8080, type: ss, cipher: chacha20-ietf-poly1305, password: 99cefdf4-f9ed-4a1e-9c83-7278cbf29b30, udp: true}
+
+dns:
+  enable: true # 是否启用dns false
+  ipv6: false
+  listen: 0.0.0.0:6553
+  enhanced-mode: fake-ip # 模式：redir-host或fake-ip
+  fake-ip-range: 198.18.0.1/16 #
+  nameserver:
+    - 223.5.5.5 # 阿里DNS
+    - 180.76.76.76 # 百度DNS
+    - 119.29.29.29 # 腾讯DNS
+    - 117.50.11.11 # ONE DNS拦截版 恶意网站拦截、广告过滤
+    - 117.50.10.10 # ONE DNS纯净版 直接返回其真实的响应结果
+    - 114.114.114.114 # 114DNS
+    - https://dns.alidns.com/dns-query # 阿里 DoH DNS
+    - https://doh.360.cn/dns-query # 360 DoH DNS
+  fallback:
+    - 8.8.8.8 # 谷歌DNS
+    - 1.1.1.1 # Cloudflare DNS
+    - tls://dns.rubyfish.cn:853
+    - tls://1.0.0.1:853
+    - tls://dns.google:853
+    - https://dns.rubyfish.cn/dns-query
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  fallback-filter:
+    geoip: true # 默认
+    ipcidr: # 在这个网段内的 IP 地址会被考虑为被污染的 IP
+      - 240.0.0.0/4
+    domain:
+      - +.v2ex.com
+      - www.google.com
+      - +.google.com.hk
+      - +.facebook.com
+      - +.twitter.com
+      - +.youtube.com
+      - +.googleapis.com
+      - +.gvt1.com
+  nameserver-policy: #通过特定域名服务器查找域名
+    "mirrors.tencentyun.com": "127.0.0.53" # 腾讯云服务器默认的镜像源仅限内网使用，
+    "dl.google.com": "223.5.5.5" # dl走直连，如果被境外dns解析到境外ip就连不上了，
