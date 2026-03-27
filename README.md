@@ -34,3 +34,10 @@ sudo systemctl restart docker
 sudo docker info
 ```
 
+## 工具
+
+- [composerize](https://www.composerize.com/)
+
+## 资料
+
+- [Using Claude Code with GitHub Copilot Subscription](https://dev.to/allentcm/using-claude-code-with-github-copilot-subscription-2obj)

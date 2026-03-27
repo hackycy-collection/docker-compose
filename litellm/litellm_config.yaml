@@ -1,0 +1,11 @@
+model_list:
+  - model_name: anthropic/*
+    litellm_params:
+      model: github_copilot/gpt-5-mini
+      extra_headers: {"editor-version": "vscode/1.113.0", "Copilot-Integration-Id": "vscode-chat"}
+  - model_name: anthropic/*
+    litellm_params:
+      model: github_copilot/claude-sonnet-4.5
+      extra_headers: {"editor-version": "vscode/1.113.0", "Copilot-Integration-Id": "vscode-chat"}
+
+  

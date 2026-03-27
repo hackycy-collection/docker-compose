@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+
+  litellm:
+    image: docker.litellm.ai/berriai/litellm:main-stable
+    volumes:
+      - /opt/litellm/litellm_config.yaml:/app/config.yaml
+    environment:
+      - AZURE_API_KEY=d6***********
+      - AZURE_API_BASE=https://openai-***********/
+    # ports:
+    #   - 4000:4000
+    command: --config /app/config.yaml --detailed_debug
+
+networks:
+  default:
+    external:
+      name: nginx_proxy_shared
