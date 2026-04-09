@@ -23,21 +23,35 @@ sudo useradd -u 1100 -g filebrowser -s /bin/false filebrowser
 chmod -R 777 /opt/filebrowser/
 ```
 
-设置目录权限
+使用`ACL`访问控制列表，安装`ACL`
 
 ``` bash
-# 1. 创建一个共享组
-sudo groupadd sharedgroup
-# 2. 将用户1100和其他用户添加到这个组
-sudo usermod -a -G sharedgroup filebrowser
-# 3. 设置目录权限及新创建的文件/目录会自动继承父目录的组
-sudo chgrp -R sharedgroup /data
-sudo chmod -R 2775 /data
+# Debian/Ubuntu
+sudo apt update && sudo apt install acl
+
+# CentOS/RHEL
+sudo yum install acl
+```
+
+给当前目录设置 ACL（用 UID，不是用户名）
+
+``` bash
+# 给当前目录设置权限
+sudo setfacl -R -m u:1100:rwx /opt
+sudo setfacl -R -m u:1100:rwx /home
+
+# 给新文件设置继承
+sudo setfacl -R -d -m u:1100:rwx /opt
+sudo setfacl -R -d -m u:1100:rwx /home
 ```
 
 ## 检查文件权限
 
 ``` bash
+# 验证
+getfacl /opt
+getfacl /home
+
 # 查看容器内运行的用户
 docker exec -it filebrowser id
 
