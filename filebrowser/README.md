@@ -45,6 +45,14 @@ sudo setfacl -R -d -m u:1100:rwx /opt
 sudo setfacl -R -d -m u:1100:rwx /home
 ```
 
+给 "Others"（其他用户）赋予权限。这意味着系统上任何用户都能访问这些目录，安全性较差。
+
+``` bash
+sudo chown -R 1100:1100 /opt /home
+```
+
+> 建议在启动 Docker 容器前，先手动创建需要的目录能够避免权限问题
+
 ## 检查文件权限
 
 ``` bash
