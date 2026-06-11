@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   happy-server:
-    image: happy-server:latest
+    image: ccr.ccs.tencentyun.com/sooosin/happy-server:latest
     # ports:
     #   - "3005:3005"
     restart: unless-stopped
