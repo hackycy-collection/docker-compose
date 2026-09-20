@@ -1,0 +1,30 @@
+version: "3"
+
+# https://github.com/LaoYutang/l4d2-server-next
+# https://l4d2-manage-docs.laoyutang.cn
+services:
+  l4d2-manager:
+    image: laoyutang/l4d2-manager-next:latest
+    container_name: l4d2-manager
+    restart: unless-stopped
+    network_mode: host
+
+    volumes:
+      - /home/steam/l4d2/left4dead2/:/left4dead2
+      - l4d2-plugins:/plugins
+      - l4d2-manager-data:/data
+      - /proc:/host/proc:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+
+    environment:
+      L4D2_MANAGER_PORT: "27020"
+      L4D2_MANAGER_PASSWORD: "请修改为强密码"
+      L4D2_GAME_PATH: "/left4dead2"
+      L4D2_RCON_URL: "127.0.0.1:27015"
+      L4D2_RCON_PASSWORD: "游戏服RCON密码"
+      L4D2_RESTART_BY_RCON: "true"
+
+volumes:
+  l4d2-plugins:
+  l4d2-manager-data:
