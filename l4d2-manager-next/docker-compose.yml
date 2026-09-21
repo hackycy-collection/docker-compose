@@ -2,6 +2,7 @@ version: "3"
 
 # https://github.com/LaoYutang/l4d2-server-next
 # https://l4d2-manage-docs.laoyutang.cn
+# https://www.bilibili.com/opus/736922474423255104
 services:
   l4d2-manager:
     image: laoyutang/l4d2-manager-next:latest
