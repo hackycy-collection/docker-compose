@@ -6,8 +6,13 @@ services:
     #   - "127.0.0.1:9090:9090"
     environment:
       ACCESS_KEY: change-me
-      ACCESS_COOKIE_SECURE: "false"
+      PUBLIC_ORIGIN: "https://panel.example.com"
+      ALLOWED_HOSTS: "panel.example.com"
+      ACCESS_COOKIE_SECURE: "true"
       ACCESS_KEY_COOKIE_NAME: gpt_image_access
+      DEFAULT_API_URL: "https://api.openai.com"
+      DEFAULT_API_KEY: "your-openai-api-key"
+      # DEFAULT_API_PATH: "/v1/images/generations"
     volumes:
       - /opt/gpt-image-panel/images:/app/images
       - /opt/gpt-image-panel/data:/app/data
