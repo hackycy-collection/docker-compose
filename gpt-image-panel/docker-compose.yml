@@ -1,0 +1,14 @@
+services:
+  gpt-image-panel:
+    image: gpt-image-panel
+    container_name: gpt-image-panel
+    # ports:
+    #   - "127.0.0.1:9090:9090"
+    environment:
+      ACCESS_KEY: change-me
+      ACCESS_COOKIE_SECURE: "false"
+      ACCESS_KEY_COOKIE_NAME: gpt_image_access
+    volumes:
+      - /opt/gpt-image-panel/images:/app/images
+      - /opt/gpt-image-panel/data:/app/data
+    restart: unless-stopped
